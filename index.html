@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ping Pong Scoreboard</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff;
+        }
+        .main-container {
+            width: 90%;
+            max-width: 1000px;
+            text-align: center;
+        }
+        .title {
+            font-size: 2.8rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #ffd700;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .title img {
+            width: 50px;
+            margin-left: 10px;
+        }
+        .scoreboard-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        .team {
+            text-align: center;
+            flex: 1;
+        }
+        .team img {
+            width: 60px;
+            margin-bottom: 10px;
+        }
+        .team-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .score {
+            font-size: 4rem;
+            margin: 10px 0;
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .team-a-btn {
+            background-color: #ff7f50;
+            color: #fff;
+        }
+        .team-b-btn {
+            background-color: #6a5acd;
+            color: #fff;
+        }
+        .reset-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .reset-btn {
+            background-color: #ff4500;
+            color: #fff;
+            padding: 10px 30px;
+            font-size: 1.2rem;
+        }
+        .divider {
+            width: 2px;
+            background-color: rgba(255, 255, 255, 0.3);
+            height: 150px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Title -->
+        <div class="title">
+            Pingpong Scoreboard 
+            <img src="https://cdn-icons-png.flaticon.com/512/2965/2965336.png" alt="Ping Pong Icon">
+        </div>
+
+        <!-- Scoreboard -->
+        <div class="scoreboard-container">
+            <!-- Team A -->
+            <div class="team" id="teamA">
+                <img src="https://cdn-icons-png.flaticon.com/512/2461/2461876.png" alt="Team A Icon">
+                <div class="team-name">Team A</div>
+                <div class="score" id="scoreA">0</div>
+                <div class="buttons">
+                    <button class="team-a-btn" onclick="increaseScore('scoreA')">+1</button>
+                    <button class="team-a-btn" onclick="decreaseScore('scoreA')">-1</button>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div class="divider"></div>
+
+            <!-- Team B -->
+            <div class="team" id="teamB">
+                <img src="https://cdn-icons-png.flaticon.com/512/2461/2461876.png" alt="Team B Icon">
+                <div class="team-name">Team B</div>
+                <div class="score" id="scoreB">0</div>
+                <div class="buttons">
+                    <button class="team-b-btn" onclick="increaseScore('scoreB')">+1</button>
+                    <button class="team-b-btn" onclick="decreaseScore('scoreB')">-1</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reset Button -->
+        <div class="reset-container">
+            <button class="reset-btn" onclick="resetScores()">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        function increaseScore(teamId) {
+            const scoreElement = document.getElementById(teamId);
+            let currentScore = parseInt(scoreElement.textContent, 10);
+            currentScore++;
+            scoreElement.textContent = currentScore;
+        }
+
+        function decreaseScore(teamId) {
+            const scoreElement = document.getElementById(teamId);
+            let currentScore = parseInt(scoreElement.textContent, 10);
+            if (currentScore > 0) {
+                currentScore--;
+            }
+            scoreElement.textContent = currentScore;
+        }
+
+        function resetScores() {
+            document.getElementById('scoreA').textContent = '0';
+            document.getElementById('scoreB').textContent = '0';
+        }
+    </script>
+</body>
+</html>
