@@ -8,7 +8,6 @@
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
-            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -25,12 +24,7 @@
             font-size: 2.8rem;
             font-weight: bold;
             margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
             color: #ffd700;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
         .title img {
             width: 50px;
@@ -47,7 +41,6 @@
         }
         .team {
             text-align: center;
-            flex: 1;
         }
         .team img {
             width: 60px;
@@ -60,25 +53,18 @@
         }
         .score {
             font-size: 4rem;
-            margin: 10px 0;
         }
         .buttons {
             display: flex;
-            justify-content: center;
             gap: 10px;
             margin-top: 10px;
         }
         button {
             padding: 10px 20px;
             font-size: 1rem;
-            font-weight: bold;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-        button:hover {
-            transform: scale(1.05);
         }
         .team-a-btn {
             background-color: #ff7f50;
@@ -88,107 +74,95 @@
             background-color: #6a5acd;
             color: #fff;
         }
-        .reset-container {
-            text-align: center;
-            margin-top: 20px;
-        }
         .reset-btn {
             background-color: #ff4500;
             color: #fff;
             padding: 10px 30px;
             font-size: 1.2rem;
+            margin-top: 20px;
         }
         .divider {
             width: 2px;
             background-color: rgba(255, 255, 255, 0.3);
             height: 150px;
         }
-        .winner-message {
+        .message {
             font-size: 2rem;
             font-weight: bold;
             margin-top: 20px;
-            color: #00ff00;
         }
     </style>
 </head>
 <body>
     <div class="main-container">
-        <!-- Title -->
         <div class="title">
             Pingpong Scoreboard
             <img src="https://cdn-icons-png.flaticon.com/512/2965/2965336.png" alt="Ping Pong Icon">
         </div>
 
-        <!-- Scoreboard -->
         <div class="scoreboard-container">
-            <!-- Team A -->
             <div class="team" id="teamA">
                 <img src="https://cdn-icons-png.flaticon.com/512/2365/2365054.png" alt="Team A Icon">
                 <div class="team-name">Team A</div>
                 <div class="score" id="scoreA">0</div>
                 <div class="buttons">
-                    <button class="team-a-btn" onclick="increaseScore('scoreA', 'Team A')">+1</button>
-                    <button class="team-a-btn" onclick="decreaseScore('scoreA')">-1</button>
+                    <button class="team-a-btn" onclick="updateScore('A', 1)">+1</button>
+                    <button class="team-a-btn" onclick="updateScore('A', -1)">-1</button>
                 </div>
             </div>
 
-            <!-- Divider -->
             <div class="divider"></div>
 
-            <!-- Team B -->
             <div class="team" id="teamB">
                 <img src="https://cdn-icons-png.flaticon.com/512/2365/2365055.png" alt="Team B Icon">
                 <div class="team-name">Team B</div>
                 <div class="score" id="scoreB">0</div>
                 <div class="buttons">
-                    <button class="team-b-btn" onclick="increaseScore('scoreB', 'Team B')">+1</button>
-                    <button class="team-b-btn" onclick="decreaseScore('scoreB')">-1</button>
+                    <button class="team-b-btn" onclick="updateScore('B', 1)">+1</button>
+                    <button class="team-b-btn" onclick="updateScore('B', -1)">-1</button>
                 </div>
             </div>
         </div>
 
-        <!-- Winner Message -->
-        <div id="winnerMessage" class="winner-message"></div>
+        <div id="gameMessage" class="message"></div>
+        <div id="matchMessage" class="message"></div>
 
-        <!-- Reset Button -->
-        <div class="reset-container">
-            <button class="reset-btn" onclick="resetScores()">Reset</button>
-        </div>
+        <button class="reset-btn" onclick="resetAll()">Reset</button>
     </div>
 
     <script>
-        const winningScore = 11; // Score needed to win
+        const winScore = 11, maxGames = 5, gamesToWin = 3;
+        let teamWins = { A: 0, B: 0 };
 
-        function increaseScore(teamId, teamName) {
-            const scoreElement = document.getElementById(teamId);
-            let currentScore = parseInt(scoreElement.textContent, 10);
-            currentScore++;
-            scoreElement.textContent = currentScore;
+        function updateScore(team, delta) {
+            const scoreEl = document.getElementById(`score${team}`);
+            let score = Math.max(0, parseInt(scoreEl.textContent) + delta);
+            scoreEl.textContent = score;
 
-            // Check if the team wins
-            if (currentScore >= winningScore) {
-                declareWinner(teamName);
-            }
+            if (score >= winScore) declareGameWinner(team);
         }
 
-        function decreaseScore(teamId) {
-            const scoreElement = document.getElementById(teamId);
-            let currentScore = parseInt(scoreElement.textContent, 10);
-            if (currentScore > 0) {
-                currentScore--;
-            }
-            scoreElement.textContent = currentScore;
-        }
+        function declareGameWinner(team) {
+            teamWins[team]++;
+            document.getElementById('gameMessage').textContent = `Team ${team} wins the game! 🎉`;
+            resetScores();
 
-        function declareWinner(teamName) {
-            const winnerMessage = document.getElementById('winnerMessage');
-            winnerMessage.textContent = `${teamName} wins! 🎉`;
+            if (teamWins[team] === gamesToWin) {
+                document.getElementById('matchMessage').textContent = `Team ${team} wins the match! 🏆`;
+                resetAll();
+            }
         }
 
         function resetScores() {
             document.getElementById('scoreA').textContent = '0';
             document.getElementById('scoreB').textContent = '0';
-            document.getElementById('winnerMessage').textContent = '';
+        }
+
+        function resetAll() {
+            teamWins = { A: 0, B: 0 };
+            resetScores();
+            document.getElementById('gameMessage').textContent = '';
+            document.getElementById('matchMessage').textContent = '';
         }
     </script>
 </body>
