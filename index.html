@@ -103,13 +103,19 @@
             background-color: rgba(255, 255, 255, 0.3);
             height: 150px;
         }
+        .winner-message {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #00ff00;
+        }
     </style>
 </head>
 <body>
     <div class="main-container">
         <!-- Title -->
         <div class="title">
-            Pingpong Scoreboard 
+            Pingpong Scoreboard
             <img src="https://cdn-icons-png.flaticon.com/512/2965/2965336.png" alt="Ping Pong Icon">
         </div>
 
@@ -117,11 +123,11 @@
         <div class="scoreboard-container">
             <!-- Team A -->
             <div class="team" id="teamA">
-                <img src="https://cdn-icons-png.flaticon.com/512/3555/3555873.png" alt="Team A Icon">
+                <img src="https://cdn-icons-png.flaticon.com/512/2365/2365054.png" alt="Team A Icon">
                 <div class="team-name">Team A</div>
                 <div class="score" id="scoreA">0</div>
                 <div class="buttons">
-                    <button class="team-a-btn" onclick="increaseScore('scoreA')">+1</button>
+                    <button class="team-a-btn" onclick="increaseScore('scoreA', 'Team A')">+1</button>
                     <button class="team-a-btn" onclick="decreaseScore('scoreA')">-1</button>
                 </div>
             </div>
@@ -131,15 +137,18 @@
 
             <!-- Team B -->
             <div class="team" id="teamB">
-                <img src="https://cdn-icons-png.flaticon.com/512/3555/3555891.png" alt="Team B Icon">
+                <img src="https://cdn-icons-png.flaticon.com/512/2365/2365055.png" alt="Team B Icon">
                 <div class="team-name">Team B</div>
                 <div class="score" id="scoreB">0</div>
                 <div class="buttons">
-                    <button class="team-b-btn" onclick="increaseScore('scoreB')">+1</button>
+                    <button class="team-b-btn" onclick="increaseScore('scoreB', 'Team B')">+1</button>
                     <button class="team-b-btn" onclick="decreaseScore('scoreB')">-1</button>
                 </div>
             </div>
         </div>
+
+        <!-- Winner Message -->
+        <div id="winnerMessage" class="winner-message"></div>
 
         <!-- Reset Button -->
         <div class="reset-container">
@@ -148,11 +157,18 @@
     </div>
 
     <script>
-        function increaseScore(teamId) {
+        const winningScore = 11; // Score needed to win
+
+        function increaseScore(teamId, teamName) {
             const scoreElement = document.getElementById(teamId);
             let currentScore = parseInt(scoreElement.textContent, 10);
             currentScore++;
             scoreElement.textContent = currentScore;
+
+            // Check if the team wins
+            if (currentScore >= winningScore) {
+                declareWinner(teamName);
+            }
         }
 
         function decreaseScore(teamId) {
@@ -164,9 +180,15 @@
             scoreElement.textContent = currentScore;
         }
 
+        function declareWinner(teamName) {
+            const winnerMessage = document.getElementById('winnerMessage');
+            winnerMessage.textContent = `${teamName} wins! 🎉`;
+        }
+
         function resetScores() {
             document.getElementById('scoreA').textContent = '0';
             document.getElementById('scoreB').textContent = '0';
+            document.getElementById('winnerMessage').textContent = '';
         }
     </script>
 </body>
